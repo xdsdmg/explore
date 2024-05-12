@@ -2,6 +2,7 @@
 Reference: 
   1. https://react-hook-form.com/get-started
   2. https://github.com/projectsbydan/nextjs-react-form-chakra-ui/blob/master/components/forms/registration-form.tsx
+  3. https://v2.chakra-ui.com/getting-started/with-hook-form
 */
 
 'use client'
@@ -26,6 +27,10 @@ import {
   Box,
   Square,
   HStack,
+  Alert,
+  AlertIcon,
+  useDisclosure,
+  CloseButton,
 } from '@chakra-ui/react'
 
 import { EmailIcon, LockIcon } from '@chakra-ui/icons'
@@ -33,14 +38,19 @@ import { MdAccountCircle } from "react-icons/md";
 import { RiEyeFill, RiEyeOffFill } from "react-icons/ri";
 import { FaHandsClapping } from "react-icons/fa6";
 
-import { useForm } from "react-hook-form";
+import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { debounce } from 'lodash';
+import { SingleResponseBodyIF } from '@/app/model/base';
 
 interface IRegistration {
   name: string;
   email: string;
   pwd: string;
+}
+
+interface TipIF {
+  status: 'success' | 'error' | undefined,
+  msg: string | null,
 }
 
 export default function Register() {
@@ -50,30 +60,46 @@ export default function Register() {
     formState: { errors, isSubmitting }, // gets errors and "loading" state
   } = useForm<IRegistration>();
 
+  const {
+    isOpen: isVisible,
+    onClose,
+    onOpen,
+  } = useDisclosure({ defaultIsOpen: false })
 
-  const onRegistered = (data: IRegistration) => {
-    fetch('http://localhost:8080/user/register', { // TODO: need op
+
+  const [show, setShow] = useState<boolean>(false);
+  const handleClick = () => setShow(!show);
+
+  const [tip, setTip] = useState<TipIF>({ status: undefined, msg: null });
+
+  const onRegistered = async (data: IRegistration) => {
+    const resp = await fetch('/api/user/register', {
       method: 'POST',
-      headers: { "Content-Type": "application/json" },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-  };
 
-  const debouncedOnRegistered = debounce(onRegistered, 2000);
+    const body: SingleResponseBodyIF = await resp.json();
 
-  const [show, setShow] = useState(false);
-  const handleClick = () => setShow(!show);
+    if (body.code !== 0) {
+      setTip({ status: 'error', msg: body.msg })
+    } else {
+      setTip({ status: 'success', msg: 'Registered successfully' })
+    }
+
+    onOpen()
+  }
 
   return (
     <Box className="flex min-h-screen flex-col items-center justify-between p-24" bgGradient='linear(to-r, green.200, pink.500)'>
-      <Card w='405px' variant='elevated' bg='gray.50'>
+      <Card w='420px' variant='elevated' bg='gray.50'>
         <CardHeader>
           <HStack>
             <Heading size='md'>Welcome to Explore</Heading>
             <Square><Icon as={FaHandsClapping} color='orange' w={5} h={5} /></Square>
           </HStack>
         </CardHeader>
-        <form onSubmit={handleSubmit(debouncedOnRegistered)} noValidate>
+        <form onSubmit={handleSubmit(onRegistered)} noValidate>
           <CardBody>
             <VStack>
               {/* 
@@ -120,7 +146,7 @@ export default function Register() {
                     required: "Password is required.",
                     pattern: {
                       value: /^(\S)(?=.*[0-9])(?=.*[A-Z])(?=.*[a-z])(?=.*[~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_])[a-zA-Z0-9~`!@#$%^&*()--+={}\[\]|\\:;"'<>,.?/_]{10,16}$/,
-                      message: "<b>The rule of setting password</b>:\n1. Password must not contain any whitespace.\n2. Password must contain uppercases, lowercases, numeric characters and special characters (~`!@#$%^&*()--+={}[]|\:;\"'<>,.?/_).\n3. Password's length must between 10 to 16.",
+                      message: "The rule of setting password:\n1. Password must not contain any whitespace.\n2. Password must contain uppercases, lowercases, numeric characters and special characters (~`!@#$%^&*()--+={}[]|\:;\"'<>,.?/_).\n3. Password's length must between 10 to 16.",
                     },
                   })} />
                   <InputRightElement width='4.5rem'>
@@ -135,12 +161,19 @@ export default function Register() {
             </VStack>
           </CardBody>
           <CardFooter>
-            {/*
-              Submit button
-            */}
-            <Button type='submit' colorScheme='teal' variant='solid' width='100%' size='md' isLoading={isSubmitting}>
-              Register
-            </Button>
+            <VStack width='100%'>
+              {/* Tip */}
+              {isVisible ?
+                <Alert status={tip.status}>
+                  <AlertIcon />
+                  <Box fontSize='sm'>{tip.msg}</Box>
+                  <CloseButton marginLeft='auto' onClick={onClose} />
+                </Alert> : <></>}
+              {/* Submit button */}
+              <Button type='submit' colorScheme='teal' variant='solid' size='md' width='100%' isLoading={isSubmitting}>
+                Register
+              </Button>
+            </VStack>
           </CardFooter>
         </form>
       </Card>
