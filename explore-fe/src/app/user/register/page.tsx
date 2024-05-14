@@ -41,6 +41,7 @@ import { FaHandsClapping } from "react-icons/fa6";
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { SingleResponseBodyIF } from '@/app/model/base';
+import { useRouter } from 'next/navigation';
 
 interface IRegistration {
   name: string;
@@ -64,13 +65,14 @@ export default function Register() {
     isOpen: isVisible,
     onClose,
     onOpen,
-  } = useDisclosure({ defaultIsOpen: false })
-
+  } = useDisclosure({ defaultIsOpen: false });
 
   const [show, setShow] = useState<boolean>(false);
   const handleClick = () => setShow(!show);
 
   const [tip, setTip] = useState<TipIF>({ status: undefined, msg: null });
+
+  const router = useRouter();
 
   const onRegistered = async (data: IRegistration) => {
     const resp = await fetch('/api/user/register', {
@@ -79,15 +81,20 @@ export default function Register() {
       body: JSON.stringify(data),
     });
 
-    const body: SingleResponseBodyIF = await resp.json();
-
-    if (body.code !== 0) {
-      setTip({ status: 'error', msg: body.msg })
+    if (!resp.ok) {
+      setTip({ status: 'error', msg: 'Request failed' });
+      onOpen();
     } else {
-      setTip({ status: 'success', msg: 'Registered successfully' })
+      const body: SingleResponseBodyIF = await resp.json();
+      if (body.code !== 0) {
+        setTip({ status: 'error', msg: body.msg });
+        onOpen();
+      } else {
+        setTip({ status: 'success', msg: 'Registered successfully' });
+        onOpen();
+        router.push('/user/welcome')
+      }
     }
-
-    onOpen()
   }
 
   return (
