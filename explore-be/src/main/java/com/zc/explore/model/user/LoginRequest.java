@@ -1,22 +1,12 @@
 package com.zc.explore.model.user;
 
-public class RegisterRequest {
-  private String name;
+public class LoginRequest {
   private String email;
   private String pwd;
 
-  public RegisterRequest(String name, String pwd, String email) {
-    this.name = name;
-    this.pwd = pwd;
+  public LoginRequest(String email, String pwd) {
     this.email = email;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+    this.pwd = pwd;
   }
 
   public String getEmail() {
@@ -38,8 +28,7 @@ public class RegisterRequest {
   @Override
   public String toString() {
     return "{" +
-        " name='" + getName() + "'" +
-        ", email='" + getEmail() + "'" +
+        " email='" + getEmail() + "'" +
         ", pwd='" + getPwd() + "'" +
         "}";
   }

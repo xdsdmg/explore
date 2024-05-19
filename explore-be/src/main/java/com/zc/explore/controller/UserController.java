@@ -11,8 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.zc.explore.model.response.Response;
 import com.zc.explore.model.response.ResultSingle;
 import com.zc.explore.model.user.RegisterRequest;
+import com.zc.explore.model.user.LoginRequest;
 import com.zc.explore.service.UserService;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
@@ -45,6 +48,28 @@ public class UserController {
     } catch (Exception e_) {
       log.error("[user] register failed, error: {}", e_);
       e = e_;
+    }
+
+    return Response.create(null, e);
+  }
+
+  @PostMapping("/login")
+  Response<ResultSingle> login(@RequestBody LoginRequest req, HttpServletResponse resp) {
+    Exception e = null;
+    String jweToken = null;
+
+    try {
+      jweToken = userService.login(req);
+    } catch (Exception e_) {
+      log.error("[user] login failed, error: {}", e_);
+      e = e_;
+    }
+
+    if (e == null && jweToken != null) {
+      Cookie cookie = new Cookie("Jwe-Token", jweToken);
+      cookie.setHttpOnly(true);
+      cookie.setMaxAge(7 * 24 * 60 * 60);
+      resp.addCookie(cookie);
     }
 
     return Response.create(null, e);

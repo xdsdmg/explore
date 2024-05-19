@@ -28,7 +28,7 @@ app:
     pwd: ${SMTP_PWD}
     content_type: text/html
     subject: Explore
-    activate_page_path: /user/activate
+    activate_api_path: /api/user/activate
   jwt:
     alg: EC
     private_key_path: /home/zhangchi/opt/explore/key/ec

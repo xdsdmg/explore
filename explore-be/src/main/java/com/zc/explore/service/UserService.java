@@ -1,9 +1,5 @@
 package com.zc.explore.service;
 
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.util.HexFormat;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.NonNull;
@@ -14,10 +10,13 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.zc.explore.dao.UserMapper;
+import com.zc.explore.model.exception.AccountNotFoundException;
 import com.zc.explore.model.exception.EmailDupRegException;
+import com.zc.explore.model.user.LoginRequest;
 import com.zc.explore.model.user.RegisterRequest;
 import com.zc.explore.model.user.User;
 import com.zc.explore.utils.Email;
+import com.zc.explore.utils.Hash;
 import com.zc.explore.utils.Jwt;
 
 @Service
@@ -28,8 +27,9 @@ public class UserService {
   private Jwt jwtUtil;
   @Autowired
   private Email emailUtil;
+  @Autowired
+  private Hash hashUtil;
 
-  private MessageDigest md; // Used to calculate SHA-256 hash of password
   private final TransactionTemplate transactionTemplate;
 
   @Value("${app.host}")
@@ -40,14 +40,14 @@ public class UserService {
   private String CONTENT_TYPE;
   @Value("${app.email.subject}")
   private String SUBJECT;
-  @Value("${app.email.activate_page_path}")
-  private String ACTIVATE_PAGE_PATH;
+  @Value("${app.email.activate_api_path}")
+  private String ACTIVATE_API_PATH;
 
   public UserService(PlatformTransactionManager transactionManager) throws Exception {
     this.transactionTemplate = new TransactionTemplate(transactionManager);
-    this.md = MessageDigest.getInstance("SHA-256");
   }
 
+  // TODO: regex check
   public void register(RegisterRequest req) throws Exception {
     Object e = transactionTemplate.execute(new TransactionCallback<Object>() {
       public Object doInTransaction(@NonNull TransactionStatus status) {
@@ -62,15 +62,14 @@ public class UserService {
           /*
            * Create new user
            */
-          byte[] rawPwd = req.getPwd().getBytes(StandardCharsets.UTF_8);
-          String pwd = HexFormat.of().formatHex(md.digest(rawPwd)); // Get the hash of pwd
+          String pwd = hashUtil.sha256(req.getPwd()); // Get the hash of pwd
           if (userDao.createUser(new User(req.getName(), pwd, req.getEmail())) == 0) {
             return new Exception("create new user failed");
           }
 
           String content = String.format(
               "<p>Welcome to Explore!</p><p>Please click the link below to activate your account.</p><a>%s</a>",
-              String.format("%s://%s%s/%s", PROTOCOL, HOST, ACTIVATE_PAGE_PATH, jwtUtil.generate(req.getEmail())));
+              String.format("%s://%s%s/%s", PROTOCOL, HOST, ACTIVATE_API_PATH, jwtUtil.generate(req.getEmail(), 0)));
           emailUtil.send(req.getEmail(), SUBJECT, content, CONTENT_TYPE);
         } catch (Exception e) {
           status.setRollbackOnly();
@@ -87,7 +86,19 @@ public class UserService {
   }
 
   public void activate(String token) throws Exception {
-    token = jwtUtil.generate("Hello");
+    token = jwtUtil.generate("Hello", 0);
     System.out.printf("token: %s, username: %s\n", token, jwtUtil.parse(token));
+  }
+
+  public String login(LoginRequest req) throws Exception {
+    String pwd = hashUtil.sha256(req.getPwd());
+
+    if (userDao.checkAccountExist(req.getEmail(), pwd) <= 0) {
+      throw new AccountNotFoundException();
+    }
+
+    String jweToken = jwtUtil.generate(req.getEmail(), 7 * 24 * 60 * 60);
+
+    return jweToken;
   }
 }

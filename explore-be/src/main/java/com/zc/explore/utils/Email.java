@@ -21,7 +21,7 @@ public class Email {
   @Value("${app.email.from}")
   private String FROM;
   @Value("${app.email.pwd}")
-  private String PWD; // TODO: need op
+  private String PWD;
 
   /**
    * send implements the feature of sending email

@@ -18,4 +18,7 @@ public interface UserMapper {
 
   @Insert("INSERT user(`name`, `pwd`, `email`) VALUES(#{user.name}, #{user.pwd}, #{user.email})")
   int createUser(@Param("user") User user);
+
+  @Select("SELECT count(*) FROM user WHERE email = #{email} and pwd = #{pwd} and activated = 1")
+  int checkAccountExist(@Param("email") String email, @Param("pwd") String pwd);
 }

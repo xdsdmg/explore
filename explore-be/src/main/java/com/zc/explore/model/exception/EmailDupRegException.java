@@ -5,7 +5,7 @@ package com.zc.explore.model.exception;
  */
 public class EmailDupRegException extends Exception {
   public EmailDupRegException() {
-    super("The current email has been registered");
+    super("The current email has been registered.");
   }
 
   public int getCode() {

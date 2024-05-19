@@ -84,7 +84,7 @@ public class Jwt {
 
   }
 
-  public String generate(String email) throws Exception {
+  public String generate(String email, int expiration) throws Exception {
     /*
      * Get public key from file.
      */
@@ -92,12 +92,16 @@ public class Jwt {
     byte[] rawPubKey = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
     PublicKey pubKey = kf.generatePublic(new X509EncodedKeySpec(rawPubKey));
 
+    if (expiration <= 0) {
+      expiration = EXPIRATION;
+    }
+
     /*
      * Generate jwe
      */
     String jwe = Jwts.builder()
         .claim(KEY, email)
-        .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
+        .expiration(new Date(System.currentTimeMillis() + expiration))
         .encryptWith(pubKey, Jwts.KEY.ECDH_ES_A256KW, Jwts.ENC.A256GCM)
         .compact();
 
