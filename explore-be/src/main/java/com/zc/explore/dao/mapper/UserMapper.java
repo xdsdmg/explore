@@ -1,10 +1,10 @@
-package com.zc.explore.dao;
+package com.zc.explore.dao.mapper;
 
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import com.zc.explore.model.user.User;
+import com.zc.explore.dao.model.User;
 
 public interface UserMapper {
   @Select("SELECT * FROM user WHERE id = #{id}")

@@ -9,9 +9,9 @@ import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.zc.explore.dao.TopicMapper;
-import com.zc.explore.model.topiic.ListRequest;
-import com.zc.explore.model.topiic.Topic;
+import com.zc.explore.dao.mapper.TopicMapper;
+import com.zc.explore.dao.model.Topic;
+import com.zc.explore.model.topic.ListRequest;
 
 @Service
 public class TopicService {
@@ -29,6 +29,8 @@ public class TopicService {
     // List<PersonRecord> rows = mapper.selectMany(selectStatement);
     // assertThat(rows).hasSize(3);
     // }
+
+    System.out.printf("topic: %s\n", topicDao.list(new ListRequest("ab", 1, 1)).toString());
 
     return null;
   }

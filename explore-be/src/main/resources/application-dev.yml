@@ -18,6 +18,8 @@ logging:
     path: /home/zhangchi/workarea/code/explore/explore-be/log
     max-size: 10MB
     max-history: 10
+mybatis:
+  mapper-locations: classpath:com/zc/explore/dao/mapper/*.xml
 
 app:
   protocol: http

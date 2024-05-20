@@ -1,4 +1,4 @@
-package com.zc.explore.model.topiic;
+package com.zc.explore.model.topic;
 
 import com.zc.explore.model.request.PageRequest;
 

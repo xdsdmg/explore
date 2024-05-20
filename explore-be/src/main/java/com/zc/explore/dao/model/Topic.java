@@ -1,4 +1,4 @@
-package com.zc.explore.model.topiic;
+package com.zc.explore.dao.model;
 
 import java.util.Date;
 
@@ -11,6 +11,17 @@ public class Topic {
 
   private Date createdAt;
   private Date updatedAt;
+
+  public Topic() {
+  }
+
+  // public Topic(int id, String title, int userID, Date createdAt, Date updatedAt) {
+  //   this.id = id;
+  //   this.title = title;
+  //   this.userID = userID;
+  //   this.createdAt = createdAt;
+  //   this.updatedAt = updatedAt;
+  // }
 
   public Topic(int id, String title, int userID, String userName, Date createdAt, Date updatedAt) {
     this.id = id;

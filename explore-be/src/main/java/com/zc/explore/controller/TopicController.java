@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.zc.explore.model.response.Response;
 import com.zc.explore.model.response.ResultSingle;
-import com.zc.explore.model.topiic.ListRequest;
+import com.zc.explore.model.topic.ListRequest;
 import com.zc.explore.service.TopicService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,11 +21,11 @@ public class TopicController {
   private TopicService topicService;
 
   @GetMapping("/list")
-  Response<ResultSingle> list(@RequestBody ListRequest req) {
+  Response<ResultSingle> list() {
     Exception e = null;
 
     try {
-      topicService.list(req);
+      topicService.list(null);
     } catch (Exception e_) {
       log.error("[topic] list failed, error: {}", e_);
       e = e_;
