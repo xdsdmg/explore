@@ -1,11 +1,11 @@
 package com.zc.explore.model.topic;
 
-import com.zc.explore.model.request.PageRequest;
+import com.zc.explore.model.base.BasePageQuery;
 
-public class ListRequest extends PageRequest {
+public class TopicPageQuery extends BasePageQuery {
   private String titleFuzzySearch;
 
-  public ListRequest(String titleFuzzySearch, int limit, int offset) {
+  public TopicPageQuery(String titleFuzzySearch, int limit, int offset) {
     super(limit, offset);
     this.titleFuzzySearch = titleFuzzySearch;
   }

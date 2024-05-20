@@ -1,7 +1,10 @@
-package com.zc.explore.dao.model;
+package com.zc.explore.model.topic;
 
 import java.util.Date;
 
+import lombok.NoArgsConstructor;
+
+@NoArgsConstructor
 public class Topic {
   private int id;
   private String title;
@@ -11,17 +14,6 @@ public class Topic {
 
   private Date createdAt;
   private Date updatedAt;
-
-  public Topic() {
-  }
-
-  // public Topic(int id, String title, int userID, Date createdAt, Date updatedAt) {
-  //   this.id = id;
-  //   this.title = title;
-  //   this.userID = userID;
-  //   this.createdAt = createdAt;
-  //   this.updatedAt = updatedAt;
-  // }
 
   public Topic(int id, String title, int userID, String userName, Date createdAt, Date updatedAt) {
     this.id = id;

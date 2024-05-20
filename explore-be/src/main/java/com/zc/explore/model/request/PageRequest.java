@@ -2,11 +2,11 @@ package com.zc.explore.model.request;
 
 public class PageRequest {
   private int page;
-  private int limit;
+  private int size;
 
-  public PageRequest(int page, int limit) {
+  public PageRequest(int page, int size) {
     this.page = page;
-    this.limit = limit;
+    this.size = size;
   }
 
   public int getPage() {
@@ -17,19 +17,19 @@ public class PageRequest {
     this.page = page;
   }
 
-  public int getLimit() {
-    return this.limit;
+  public int getSize() {
+    return this.size;
   }
 
-  public void setLimit(int limit) {
-    this.limit = limit;
+  public void setSize(int size) {
+    this.size = size;
   }
 
   @Override
   public String toString() {
     return "{" +
         " page='" + getPage() + "'" +
-        ", limit='" + getLimit() + "'" +
+        ", size='" + getSize() + "'" +
         "}";
   }
 }

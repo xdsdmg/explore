@@ -10,11 +10,11 @@ import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 
 import com.zc.explore.dao.mapper.UserMapper;
-import com.zc.explore.dao.model.User;
 import com.zc.explore.model.exception.AccountNotFoundException;
 import com.zc.explore.model.exception.EmailDupRegException;
 import com.zc.explore.model.user.LoginRequest;
 import com.zc.explore.model.user.RegisterRequest;
+import com.zc.explore.model.user.User;
 import com.zc.explore.utils.Email;
 import com.zc.explore.utils.Hash;
 import com.zc.explore.utils.Jwt;

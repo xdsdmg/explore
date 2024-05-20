@@ -1,4 +1,4 @@
-package com.zc.explore.dao.model;
+package com.zc.explore.model.user;
 
 public class User {
   private Long id;

@@ -2,36 +2,26 @@ package com.zc.explore.service;
 
 import java.util.List;
 
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.dynamic.sql.render.RenderingStrategies;
-import org.mybatis.dynamic.sql.select.render.SelectStatementProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.zc.explore.dao.mapper.TopicMapper;
-import com.zc.explore.dao.model.Topic;
-import com.zc.explore.model.topic.ListRequest;
+import com.zc.explore.model.base.BasePageQuery;
+import com.zc.explore.model.topic.TopicPageQuery;
+import com.zc.explore.model.topic.Topic;
 
 @Service
 public class TopicService {
   @Autowired
   private TopicMapper topicDao;
-  @Autowired
-  private SqlSessionFactory sqlSessionFactory;
 
-  public List<Topic> list(ListRequest req) {
+  public List<Topic> list(String titleFuzzySearch, int page, int size) {
+    int limit = (size > 0) ? size : BasePageQuery.DEFAULT_LIMIT;
+    int offset = (page > 0 && size > 0) ? (page - 1) * size : BasePageQuery.DEFAULT_OFFSET;
 
-    // try (SqlSession session = sqlSessionFactory.openSession()) {
-    // TopicMapper mapper = session.getMapper(TopicMapper.class);
-    // SelectStatementProvider selectStatement = select
+    TopicPageQuery query = new TopicPageQuery(titleFuzzySearch, limit, offset);
 
-    // List<PersonRecord> rows = mapper.selectMany(selectStatement);
-    // assertThat(rows).hasSize(3);
-    // }
-
-    System.out.printf("topic: %s\n", topicDao.list(new ListRequest("ab", 1, 1)).toString());
-
+    System.out.printf("topic: %s\n", topicDao.list(query).toString());
     return null;
   }
 }
