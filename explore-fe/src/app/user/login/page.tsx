@@ -1,10 +1,3 @@
-/* 
-Reference: 
-  1. https://react-hook-form.com/get-started
-  2. https://github.com/projectsbydan/nextjs-react-form-chakra-ui/blob/master/components/forms/registration-form.tsx
-  3. https://v2.chakra-ui.com/getting-started/with-hook-form
-*/
-
 'use client'
 
 import {
@@ -42,8 +35,7 @@ import { useState } from 'react';
 import { SingleResponseBodyIF } from '@/app/model/base';
 import { useRouter } from 'next/navigation';
 
-interface IRegistration {
-  name: string;
+interface LoginIF {
   email: string;
   pwd: string;
 }
@@ -53,12 +45,12 @@ interface TipIF {
   msg: string | null,
 }
 
-export default function Register() {
+export default function Login() {
   const {
     handleSubmit, // handels the form submit event
     register, // ties the inputs to react-form
     formState: { errors, isSubmitting }, // gets errors and "loading" state
-  } = useForm<IRegistration>();
+  } = useForm<LoginIF>();
 
   const {
     isOpen: isVisible,
@@ -73,26 +65,27 @@ export default function Register() {
 
   const router = useRouter();
 
-  const onRegistered = async (data: IRegistration) => {
-    const resp = await fetch('/api/user/register', {
+  const onLogin = async (data: LoginIF) => {
+    const resp = await fetch('/api/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
 
-    if (!resp.ok) {
+    if (resp.status >= 500 && resp.status <= 599) {
       setTip({ status: 'error', msg: 'Request failed' });
       onOpen();
+      return;
+    }
+
+    const body: SingleResponseBodyIF = await resp.json();
+    if (body.code !== 0) {
+      setTip({ status: 'error', msg: body!.msg ? body.msg : 'Request failed' });
+      onOpen();
     } else {
-      const body: SingleResponseBodyIF = await resp.json();
-      if (body.code !== 0) {
-        setTip({ status: 'error', msg: body.msg });
-        onOpen();
-      } else {
-        setTip({ status: 'success', msg: 'Registered successfully' });
-        onOpen();
-        router.push('/user/welcome')
-      }
+      setTip({ status: 'success', msg: 'Login successfully' });
+      onOpen();
+      router.push('/');
     }
   }
 
@@ -105,7 +98,7 @@ export default function Register() {
             <Square><Icon as={FaHandsClapping} color='orange' w={5} h={5} /></Square>
           </HStack>
         </CardHeader>
-        <form onSubmit={handleSubmit(onRegistered)} noValidate>
+        <form onSubmit={handleSubmit(onLogin)} noValidate>
           <CardBody>
             <VStack>
               {/*

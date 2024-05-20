@@ -43,7 +43,7 @@ import { useState } from 'react';
 import { SingleResponseBodyIF } from '@/app/model/base';
 import { useRouter } from 'next/navigation';
 
-interface IRegistration {
+interface RegisterIF {
   name: string;
   email: string;
   pwd: string;
@@ -59,7 +59,7 @@ export default function Register() {
     handleSubmit, // handels the form submit event
     register, // ties the inputs to react-form
     formState: { errors, isSubmitting }, // gets errors and "loading" state
-  } = useForm<IRegistration>();
+  } = useForm<RegisterIF>();
 
   const {
     isOpen: isVisible,
@@ -74,7 +74,7 @@ export default function Register() {
 
   const router = useRouter();
 
-  const onRegistered = async (data: IRegistration) => {
+  const onRegister = async (data: RegisterIF) => {
     const resp = await fetch('/api/user/register', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -106,7 +106,7 @@ export default function Register() {
             <Square><Icon as={FaHandsClapping} color='orange' w={5} h={5} /></Square>
           </HStack>
         </CardHeader>
-        <form onSubmit={handleSubmit(onRegistered)} noValidate>
+        <form onSubmit={handleSubmit(onRegister)} noValidate>
           <CardBody>
             <VStack>
               {/* 
