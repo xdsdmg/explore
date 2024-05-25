@@ -1,7 +1,7 @@
 package com.zc.explore.model.base;
 
 public class BasePageQuery {
-  public static final int DEFAULT_LIMIT = 0;
+  public static final int DEFAULT_LIMIT = 10;
   public static final int DEFAULT_OFFSET = 0;
 
   private int limit;

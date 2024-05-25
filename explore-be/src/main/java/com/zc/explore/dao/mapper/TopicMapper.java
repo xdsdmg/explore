@@ -10,4 +10,6 @@ import com.zc.explore.model.topic.Topic;
 @Mapper
 public interface TopicMapper {
   List<Topic> list(TopicPageQuery query);
+
+  int count(String titleFuzzySearch);
 }

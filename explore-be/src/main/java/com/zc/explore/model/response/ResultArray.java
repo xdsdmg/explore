@@ -1,12 +1,14 @@
 package com.zc.explore.model.response;
 
-public class ResultArray implements ResultIF {
+import java.util.List;
+
+public class ResultArray<T> implements ResultIF {
   private int code;
   private String msg;
   private int total;
-  private Object[] data;
+  private List<T> data;
 
-  public ResultArray(int code, String msg, int total, Object[] data) {
+  public ResultArray(int code, String msg, int total, List<T> data) {
     this.code = code;
     this.msg = msg;
     this.total = total;
@@ -41,7 +43,7 @@ public class ResultArray implements ResultIF {
     return this.data;
   }
 
-  public void setData(Object[] data) {
+  public void setData(List<T> data) {
     this.data = data;
   }
 }

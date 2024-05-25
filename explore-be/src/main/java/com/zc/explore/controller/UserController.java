@@ -36,7 +36,7 @@ public class UserController {
       e = e_;
     }
 
-    return Response.create(null, e);
+    return Response.createSingleResponse(null, e);
   }
 
   @GetMapping("/activate/{token}")
@@ -46,11 +46,11 @@ public class UserController {
     try {
       userService.activate(token);
     } catch (Exception e_) {
-      log.error("[user] register failed, error: {}", e_);
+      log.error("[user] activate failed, error: {}", e_);
       e = e_;
     }
 
-    return Response.create(null, e);
+    return Response.createSingleResponse(null, e);
   }
 
   @PostMapping("/login")
@@ -72,6 +72,6 @@ public class UserController {
       resp.addCookie(cookie);
     }
 
-    return Response.create(null, e);
+    return Response.createSingleResponse(null, e);
   }
 }

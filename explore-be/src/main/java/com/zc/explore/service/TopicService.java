@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.zc.explore.dao.mapper.TopicMapper;
 import com.zc.explore.model.base.BasePageQuery;
+import com.zc.explore.model.base.ResultList;
 import com.zc.explore.model.topic.TopicPageQuery;
 import com.zc.explore.model.topic.Topic;
 
@@ -15,13 +16,15 @@ public class TopicService {
   @Autowired
   private TopicMapper topicDao;
 
-  public List<Topic> list(String titleFuzzySearch, int page, int size) {
+  public ResultList<Topic> list(String titleFuzzySearch, int page, int size) {
     int limit = (size > 0) ? size : BasePageQuery.DEFAULT_LIMIT;
     int offset = (page > 0 && size > 0) ? (page - 1) * size : BasePageQuery.DEFAULT_OFFSET;
 
     TopicPageQuery query = new TopicPageQuery(titleFuzzySearch, limit, offset);
 
-    System.out.printf("topic: %s\n", topicDao.list(query).toString());
-    return null;
+    List<Topic> data = topicDao.list(query);
+    int total = topicDao.count(query.getTitleFuzzySearch());
+
+    return new ResultList<Topic>(data, total);
   }
 }

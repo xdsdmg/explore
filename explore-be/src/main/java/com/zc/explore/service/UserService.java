@@ -55,7 +55,7 @@ public class UserService {
           /*
            * Check whether the email is registered
            */
-          if (userDao.getUserTotalOfEmailWithWriteLock(req.getEmail()) > 0) {
+          if (userDao.getUserTotalOfEmailWithReadLock(req.getEmail()) > 0) {
             return new EmailDupRegException();
           }
 

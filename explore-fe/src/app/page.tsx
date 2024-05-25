@@ -1,30 +1,47 @@
 "use client"
 
 import {
-  Box, Input, InputGroup, InputLeftElement, Button, Flex,
-  Spacer, Heading, Link, Divider, VStack, Card, CardBody, CardFooter, Grid, Text,
-  Container
+  Box, Input, InputGroup, InputLeftElement, Flex,
+  Spacer, Heading, Link, Divider, VStack, Card, CardBody, Grid, Text,
 } from "@chakra-ui/react";
 import { SearchIcon } from "@chakra-ui/icons";
+import { useEffect, useState } from "react";
+import { ArrayResponseBodyIF } from "./model/base"
 
 interface TopicIF {
   title: string,
-  username: string,
-  time: string,
+  userName: string,
+  createdAt: number,
 }
 
 const Topic = (props: TopicIF) => {
+  console.log(props.createdAt)
+
+  let timeStamp = new Date(props.createdAt).toLocaleString()
+
   return (
-    <Card size='sm' w='800px'>
+    <Card size='sm' w='800px' variant='outline'>
       <CardBody>
         <Link>{props.title}</Link>
-        <Text fontSize='xs'>by {props.username} at {props.time}</Text>
+        <Text fontSize='xs'>by {props.userName} at {timeStamp}</Text>
       </CardBody>
     </Card>
   )
 }
 
 export default function Home() {
+  const [topics, setTopics] = useState([] as TopicIF[])
+
+  const fetchTopic = () => {
+    fetch('/api/topic/list', {
+      method: 'GET',
+    })
+      .then((res) => res.json())
+      .then((body: ArrayResponseBodyIF<TopicIF>) => { setTopics(body.data) });
+  }
+
+  useEffect(() => { fetchTopic(); }, [])
+
   return (
     <Grid minHeight='100%' templateRows={'60px auto 120px'}>
       <Box>
@@ -46,11 +63,9 @@ export default function Home() {
       </Box>
       <Flex justifyContent='center'>
         <VStack>
-          <Topic title='This is the title of a topic' username='ZhangChi' time='2024-05-20 19:41:33 (UTC+8)' />
-          <Topic title='This is the title of a topic' username='ZhangChi' time='2024-05-20 19:41:33 (UTC+8)' />
-          <Topic title='This is the title of a topic' username='ZhangChi' time='2024-05-20 19:41:33 (UTC+8)' />
-          <Topic title='This is the title of a topic' username='ZhangChi' time='2024-05-20 19:41:33 (UTC+8)' />
-          <Topic title='This is the title of a topic' username='ZhangChi' time='2024-05-20 19:41:33 (UTC+8)' />
+          {topics.map((topic, index) => {
+            return <Topic title={topic.title} userName={topic.userName} createdAt={topic.createdAt}></Topic>
+          })}
         </VStack>
       </Flex>
       <Box>
@@ -63,7 +78,7 @@ export default function Home() {
             </Flex>
             <Box w='100%' padding={'2px 0 2px 0'}>
               <Text fontSize='sm'>Hi! Welcome to Explore.</Text>
-              <Text fontSize='sm' as='cite'>In the world of computers, anyone who can program can own the world.</Text>
+              <Text fontSize='sm' as='cite'>Do have faith in what you love.</Text>
             </Box>
           </VStack>
         </Flex>

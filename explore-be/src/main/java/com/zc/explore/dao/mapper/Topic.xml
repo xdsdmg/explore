@@ -20,4 +20,14 @@
     <if test="titleFuzzySearch != null"> AND topic.title like concat('%', #{titleFuzzySearch}, '%') </if>
     LIMIT #{limit} OFFSET #{offset}
   </select>
+
+  <select id="count" parameterType="String" resultType="int">
+    SELECT 
+      COUNT(*) 
+    FROM 
+      topic
+    LEFT JOIN user ON topic.user_id = user.id
+    WHERE 1 = 1
+    <if test="titleFuzzySearch != null"> AND topic.title like concat('%', #{titleFuzzySearch}, '%') </if>
+  </select>
 </mapper> 

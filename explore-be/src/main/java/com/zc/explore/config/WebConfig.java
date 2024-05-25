@@ -16,12 +16,14 @@ import com.zc.explore.interceptor.AuthInterceptor;
 public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(@NonNull InterceptorRegistry registry) {
+    // Set Auth middleware.
     registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
   }
 
   @Override
   // TODO: need op
   public void addCorsMappings(@NonNull CorsRegistry registry) {
+    // Set Cors configuration.
     registry.addMapping("/**");
   }
 }

@@ -3,10 +3,6 @@
 import { Box, Card, CardHeader, CardBody, CardFooter, HStack, Heading, Square, Icon, Text, Button } from "@chakra-ui/react"
 import { FaHandsClapping } from "react-icons/fa6";
 
-// interface WelcomeIF {
-//   name: string,
-// }
-
 export default function Welcome(props: any) {
   return (
     <Box className="flex min-h-screen flex-col items-center justify-between p-24" bgGradient='linear(to-r, green.200, pink.500)'>

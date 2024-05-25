@@ -24,9 +24,6 @@ import java.nio.file.Paths;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Component
 public class Jwt {
   @Value("${app.jwt.expiration}")
@@ -48,40 +45,35 @@ public class Jwt {
    * @param priKeyPath
    * @param pubKeyPath
    */
-  public static void init(String priKeyPath, String pubKeyPath) {
-    try {
-      /*
-       * Check whether the files of private key and public key exist.
-       * If the files exist, return directly.
-       */
-      File privateKeyFile = new File(priKeyPath);
-      File publicKeyFile = new File(pubKeyPath);
-      if (privateKeyFile.isFile() && publicKeyFile.isFile()) {
-        return;
-      }
-
-      /*
-       * Generate private key and public key, and write them to files.
-       */
-      privateKeyFile.createNewFile();
-      publicKeyFile.createNewFile();
-      try (FileOutputStream priKeyFileStream = new FileOutputStream(privateKeyFile);
-          FileOutputStream pubKeyFileStream = new FileOutputStream(publicKeyFile);) {
-        // Create a KeyPair suitable for the desired EC key algorithm:
-        KeyPair pair = Jwts.SIG.ES512.keyPair().build();
-        // Write the keys to files.
-        priKeyFileStream.write(pair.getPrivate().getEncoded());
-        pubKeyFileStream.write(pair.getPublic().getEncoded());
-      } catch (Exception e) {
-        // If error occurs, delete the private key and public key file.
-        privateKeyFile.delete();
-        publicKeyFile.delete();
-        throw e;
-      }
-    } catch (Exception e) {
-      log.error("jwt init() failed, error: {}", e);
+  public static void init(String priKeyPath, String pubKeyPath) throws Exception {
+    /*
+     * Check whether the files of private key and public key exist.
+     * If the files exist, return directly.
+     */
+    File privateKeyFile = new File(priKeyPath);
+    File publicKeyFile = new File(pubKeyPath);
+    if (privateKeyFile.isFile() && publicKeyFile.isFile()) {
+      return;
     }
 
+    /*
+     * Generate private key and public key, and write them to files.
+     */
+    privateKeyFile.createNewFile();
+    publicKeyFile.createNewFile();
+    try (FileOutputStream priKeyFileStream = new FileOutputStream(privateKeyFile);
+        FileOutputStream pubKeyFileStream = new FileOutputStream(publicKeyFile);) {
+      // Create a KeyPair suitable for the desired EC key algorithm:
+      KeyPair pair = Jwts.SIG.ES512.keyPair().build();
+      // Write the keys to files.
+      priKeyFileStream.write(pair.getPrivate().getEncoded());
+      pubKeyFileStream.write(pair.getPublic().getEncoded());
+    } catch (Exception e) {
+      // If error occurs, delete the private key and public key file.
+      privateKeyFile.delete();
+      publicKeyFile.delete();
+      throw e;
+    }
   }
 
   public String generate(String email, int expiration) throws Exception {
@@ -97,7 +89,7 @@ public class Jwt {
     }
 
     /*
-     * Generate jwe
+     * Generate jwe.
      */
     String jwe = Jwts.builder()
         .claim(KEY, email)
@@ -117,7 +109,7 @@ public class Jwt {
     PrivateKey priKey = kf.generatePrivate(new PKCS8EncodedKeySpec(rawPriKey));
 
     /*
-     * Parse jwe
+     * Parse jwe.
      */
     Claims claims = Jwts.parser()
         .decryptWith(priKey)
