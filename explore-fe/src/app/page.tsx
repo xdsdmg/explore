@@ -7,6 +7,7 @@ import {
 import { SearchIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { ArrayResponseBodyIF } from "./model/base"
+import Pagination from "./components/pagination";
 
 interface TopicIF {
   title: string,
@@ -66,6 +67,7 @@ export default function Home() {
           {topics.map((topic, index) => {
             return <Topic title={topic.title} userName={topic.userName} createdAt={topic.createdAt}></Topic>
           })}
+          <Pagination total={120} />
         </VStack>
       </Flex>
       <Box>

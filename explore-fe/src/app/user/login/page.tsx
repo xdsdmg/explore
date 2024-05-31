@@ -24,6 +24,10 @@ import {
   AlertIcon,
   useDisclosure,
   CloseButton,
+  Link,
+  Flex,
+  Divider,
+  Text,
 } from '@chakra-ui/react'
 
 import { EmailIcon, LockIcon } from '@chakra-ui/icons'
@@ -142,6 +146,9 @@ export default function Login() {
                 <FormHelperText></FormHelperText>
                 <FormErrorMessage whiteSpace='pre-wrap' wordBreak='break-word'>{errors.pwd && errors.pwd.message}</FormErrorMessage>
               </FormControl>
+              <Text fontSize='sm' width='100%'>
+                <Link color='teal'>Forget your password?</Link> Or <Link color='teal' href='/user/register'>create a new accout?</Link>
+              </Text>
             </VStack>
           </CardBody>
           <CardFooter>
