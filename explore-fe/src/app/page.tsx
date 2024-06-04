@@ -67,7 +67,7 @@ export default function Home() {
           {topics.map((topic, index) => {
             return <Topic title={topic.title} userName={topic.userName} createdAt={topic.createdAt}></Topic>
           })}
-          <Pagination total={120} />
+          <Pagination total={250} />
         </VStack>
       </Flex>
       <Box>
