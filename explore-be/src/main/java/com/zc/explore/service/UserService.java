@@ -12,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.zc.explore.dao.mapper.UserMapper;
 import com.zc.explore.model.exception.AccountNotFoundException;
 import com.zc.explore.model.exception.EmailDupRegException;
+import com.zc.explore.model.user.LoginInfo;
 import com.zc.explore.model.user.LoginRequest;
 import com.zc.explore.model.user.RegisterRequest;
 import com.zc.explore.model.user.User;
@@ -45,6 +46,14 @@ public class UserService {
 
   public UserService(PlatformTransactionManager transactionManager) throws Exception {
     this.transactionTemplate = new TransactionTemplate(transactionManager);
+  }
+
+  public LoginInfo info(String jweToken) throws Exception {
+    String email = jwtUtil.parse(jweToken);
+    
+    User u = userDao.getUserByEmail(email);
+
+    return new LoginInfo(u.getName(), u.getEmail());
   }
 
   // TODO: regex check
@@ -97,7 +106,7 @@ public class UserService {
       throw new AccountNotFoundException();
     }
 
-    String jweToken = jwtUtil.generate(req.getEmail(), 7 * 24 * 60 * 60);
+    String jweToken = jwtUtil.generate(req.getEmail(), 7 * 24 * 60 * 60 * 1000);
 
     return jweToken;
   }

@@ -25,8 +25,6 @@ import {
   useDisclosure,
   CloseButton,
   Link,
-  Flex,
-  Divider,
   Text,
 } from '@chakra-ui/react'
 
@@ -82,7 +80,7 @@ export default function Login() {
       return;
     }
 
-    const body: SingleResponseBodyIF = await resp.json();
+    const body: SingleResponseBodyIF<any> = await resp.json();
     if (body.code !== 0) {
       setTip({ status: 'error', msg: body!.msg ? body.msg : 'Request failed' });
       onOpen();

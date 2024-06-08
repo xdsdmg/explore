@@ -1,6 +1,6 @@
-interface SingleResponseBodyIF {
+interface SingleResponseBodyIF<T> {
   code: number,
-  data: any,
+  data: T,
   msg: string,
 }
 

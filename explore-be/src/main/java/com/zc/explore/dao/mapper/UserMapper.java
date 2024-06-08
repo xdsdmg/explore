@@ -10,6 +10,9 @@ public interface UserMapper {
   @Select("SELECT * FROM user WHERE id = #{id}")
   User getUserById(@Param("id") Long id);
 
+  @Select("SELECT * FROM user WHERE email = #{email} limit 1")
+  User getUserByEmail(@Param("email") String email);
+
   @Select("SELECT count(*) FROM user WHERE email = #{email}")
   int getUserTotalOfEmail(@Param("email") String email);
 
