@@ -8,18 +8,18 @@ import lombok.NoArgsConstructor;
 public class Topic {
   private int id;
   private String title;
-
-  private int userID;
+  private Long userID;
   private String userName;
-
+  private String content;
   private Date createdAt;
   private Date updatedAt;
 
-  public Topic(int id, String title, int userID, String userName, Date createdAt, Date updatedAt) {
+  public Topic(int id, String title, Long userID, String userName, String content, Date createdAt, Date updatedAt) {
     this.id = id;
     this.title = title;
     this.userID = userID;
     this.userName = userName;
+    this.content = content;
     this.createdAt = createdAt;
     this.updatedAt = updatedAt;
   }
@@ -40,11 +40,11 @@ public class Topic {
     this.title = title;
   }
 
-  public int getUserID() {
+  public Long getUserID() {
     return this.userID;
   }
 
-  public void setUserID(int userID) {
+  public void setUserID(Long userID) {
     this.userID = userID;
   }
 
@@ -72,6 +72,14 @@ public class Topic {
     this.updatedAt = updatedAt;
   }
 
+  public String getContent() {
+    return this.content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
   @Override
   public String toString() {
     return "{" +
@@ -79,6 +87,7 @@ public class Topic {
         ", title='" + getTitle() + "'" +
         ", userID='" + getUserID() + "'" +
         ", userName='" + getUserName() + "'" +
+        ", content='" + getContent() + "'" +
         ", createdAt='" + getCreatedAt() + "'" +
         ", updatedAt='" + getUpdatedAt() + "'" +
         "}";

@@ -2,15 +2,20 @@ package com.zc.explore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zc.explore.model.base.ResultList;
 import com.zc.explore.model.response.Response;
-import com.zc.explore.model.response.ResultArray;
+import com.zc.explore.model.response.*;
 import com.zc.explore.model.topic.Topic;
+import com.zc.explore.model.user.User;
 import com.zc.explore.service.TopicService;
+import com.zc.explore.service.UserService;
 import com.zc.explore.utils.Type;
 
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 public class TopicController {
   @Autowired
   private TopicService topicService;
+  @Autowired
+  private UserService userService;
 
   @SuppressWarnings("rawtypes")
   @GetMapping("/list")
@@ -40,5 +47,25 @@ public class TopicController {
     }
 
     return Response.createArrayResponse(result, e);
+  }
+
+  @PostMapping("/")
+  Response<ResultSingle> create(@RequestBody Topic req, @RequestHeader("Jwe-Token") String jweToken) {
+    Exception e = null;
+
+    try {
+      /*
+       * Add user's information to topic
+       */
+      User user = userService.getUserByJweToken(jweToken);
+      req.setUserID(user.getId());
+
+      topicService.create(req);
+    } catch (Exception e_) {
+      log.error("[topic] create topic failed, error: {}", e_);
+      e = e_;
+    }
+
+    return Response.createSingleResponse(null, e);
   }
 }

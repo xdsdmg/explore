@@ -50,10 +50,18 @@ public class UserService {
 
   public LoginInfo info(String jweToken) throws Exception {
     String email = jwtUtil.parse(jweToken);
-    
+
     User u = userDao.getUserByEmail(email);
 
     return new LoginInfo(u.getName(), u.getEmail());
+  }
+
+  public User getUserByJweToken(String jweToken) throws Exception {
+    String email = jwtUtil.parse(jweToken);
+
+    User u = userDao.getUserByEmail(email);
+
+    return u;
   }
 
   // TODO: regex check

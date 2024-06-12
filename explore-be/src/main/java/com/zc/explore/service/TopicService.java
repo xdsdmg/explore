@@ -27,4 +27,8 @@ public class TopicService {
 
     return new ResultList<Topic>(data, total);
   }
+
+  public void create(Topic topic) throws Exception {
+    topicDao.createTopic(topic);
+  }
 }

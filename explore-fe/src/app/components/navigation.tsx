@@ -3,9 +3,10 @@
  */
 
 import {
-  Box, Input, InputGroup, InputLeftElement, Flex, Spacer, Heading, Link, Divider
+  Box, Input, InputGroup, InputLeftElement, Flex, Spacer, Heading, Link, Divider,
+  Menu, MenuButton, MenuList, MenuItem
 } from "@chakra-ui/react";
-import { SearchIcon } from "@chakra-ui/icons";
+import { SearchIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { UserInfoIF } from "../model/user";
 import { SingleResponseBodyIF } from "../model/base";
@@ -46,7 +47,15 @@ export default function Navigation() {
           userInfo == null ?
             <Link href='/user/login'>Login</Link>
             :
-            <Link href='/user/login'>{userInfo.name}</Link>
+            <Menu>
+              <MenuButton>
+                {userInfo.name} <ChevronDownIcon />
+              </MenuButton>
+              <MenuList>
+                <MenuItem>Create a topic</MenuItem>
+                <MenuItem>Logout</MenuItem>
+              </MenuList>
+            </Menu>
         }
       </Flex>
       <Divider />

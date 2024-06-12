@@ -27,6 +27,7 @@ public class UserController {
   @Autowired
   private UserService userService;
 
+  // TODO: change the param to header
   @GetMapping("/info")
   Response<ResultSingle> info(@RequestParam(value = "jwe_token", required = true) String jweToken) {
     Exception e = null;

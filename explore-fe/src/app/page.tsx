@@ -1,7 +1,7 @@
 "use client"
 
 import {
-  Flex, Link, VStack, Card, CardBody, Grid, Text,
+  Flex, Link, VStack, Card, CardBody, Grid, Text
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { ArrayResponseBodyIF } from "./model/base"
