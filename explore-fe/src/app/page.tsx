@@ -6,8 +6,6 @@ import {
 import { useEffect, useState } from "react";
 import { ArrayResponseBodyIF } from "./model/base"
 import Pagination from "./components/pagination";
-import Navigation from "./components/navigation";
-import Footer from "./components/footer";
 
 interface TopicIF {
   title: string,
@@ -43,8 +41,7 @@ export default function Home() {
 
   return (
     <Grid minHeight='100%' templateRows={'60px auto 120px'}>
-      <Navigation />
-      <Flex justifyContent='center'>
+      <Flex justifyContent='center' padding="10px 0">
         <VStack>
           {
             body.data.map((topic, index) =>
@@ -59,7 +56,6 @@ export default function Home() {
           <Pagination total={body.total} callback={fetchTopic} />
         </VStack>
       </Flex>
-      <Footer />
     </Grid >
   );
 }

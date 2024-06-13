@@ -30,7 +30,7 @@ export default function Navigation() {
   const [userInfo, setUserInfo] = useState<null | UserInfoIF>(null);
 
   return (
-    <Box w='100%'>
+    <Box w='100%' h='50px'>
       <Flex alignItems='center' gap='8' padding={'5px 150px'} bg='white'>
         <Box p='2'>
           <Heading size='md'><Link href='/'>Explore</Link></Heading>

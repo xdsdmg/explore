@@ -85,7 +85,7 @@ export default function Register() {
       setTip({ status: 'error', msg: 'Request failed' });
       onOpen();
     } else {
-      const body: SingleResponseBodyIF = await resp.json();
+      const body: SingleResponseBodyIF<any> = await resp.json();
       if (body.code !== 0) {
         setTip({ status: 'error', msg: body.msg });
         onOpen();
@@ -98,7 +98,7 @@ export default function Register() {
   }
 
   return (
-    <Box className="flex min-h-screen flex-col items-center justify-between p-24" bgGradient='linear(to-r, green.200, pink.500)'>
+    <Box className="flex flex-col items-center justify-between p-24" bgGradient='linear(to-r, green.200, pink.500)'>
       <Card w='420px' variant='elevated' bg='gray.50'>
         <CardHeader>
           <HStack>
