@@ -12,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import com.zc.explore.dao.mapper.UserMapper;
 import com.zc.explore.model.exception.AccountNotFoundException;
 import com.zc.explore.model.exception.EmailDupRegException;
+import com.zc.explore.model.exception.PwdIncorrectException;
 import com.zc.explore.model.user.LoginInfo;
 import com.zc.explore.model.user.LoginRequest;
 import com.zc.explore.model.user.RegisterRequest;
@@ -110,8 +111,15 @@ public class UserService {
   public String login(LoginRequest req) throws Exception {
     String pwd = hashUtil.sha256(req.getPwd());
 
-    if (userDao.checkAccountExist(req.getEmail(), pwd) <= 0) {
+    User user;
+    try {
+      user = userDao.getUserByEmail(req.getEmail());
+    } catch (Exception e) {
       throw new AccountNotFoundException();
+    }
+
+    if (!user.getPwd().equals(pwd)) {
+      throw new PwdIncorrectException();
     }
 
     String jweToken = jwtUtil.generate(req.getEmail(), 7 * 24 * 60 * 60 * 1000);

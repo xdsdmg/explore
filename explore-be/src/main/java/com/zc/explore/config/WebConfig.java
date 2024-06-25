@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
   @Override
   public void addInterceptors(@NonNull InterceptorRegistry registry) {
     // Set Auth middleware.
-    registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/**");
+    registry.addInterceptor(new AuthInterceptor()).addPathPatterns("/api/user/auth/**", "/api/topic/auth/**");
   }
 
   @Override

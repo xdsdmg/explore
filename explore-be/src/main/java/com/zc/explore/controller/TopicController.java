@@ -49,7 +49,7 @@ public class TopicController {
     return Response.createArrayResponse(result, e);
   }
 
-  @PostMapping("/")
+  @PostMapping("/auth/create")
   Response<ResultSingle> create(@RequestBody Topic req, @RequestHeader("Jwe-Token") String jweToken) {
     Exception e = null;
 

@@ -16,8 +16,14 @@ export default function Navigation() {
   const fetchUserInfo = () => {
     const token = getCookie('Jwe-Token');
 
-    fetch(`/api/user/info?jwe_token=${token}`, {
+    const headers: HeadersInit = new Headers();
+    if (token) {
+      headers.set('Jwe-Token', token);
+    }
+
+    fetch(`/api/user/auth/info?jwe_token=${token}`, {
       method: 'GET',
+      headers: headers,
     })
       .then((res) => res.json())
       .then((body: SingleResponseBodyIF<UserInfoIF>) => {

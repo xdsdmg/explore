@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,9 +28,8 @@ public class UserController {
   @Autowired
   private UserService userService;
 
-  // TODO: change the param to header
-  @GetMapping("/info")
-  Response<ResultSingle> info(@RequestParam(value = "jwe_token", required = true) String jweToken) {
+  @GetMapping("/auth/info")
+  Response<ResultSingle> info(@RequestHeader("Jwe-Token") String jweToken) {
     Exception e = null;
     LoginInfo info = null;
 

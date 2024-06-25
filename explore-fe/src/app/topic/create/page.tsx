@@ -31,6 +31,8 @@ export default function Create() {
 
   const handlePublish = () => {
     console.log(mdContent);
+    let title = (document.getElementById('title') as HTMLInputElement).value;
+    console.log(title);
   };
 
   return (

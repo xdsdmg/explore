@@ -3,7 +3,7 @@ package com.zc.explore.model.exception;
 /**
  * AccountNotFoundException
  */
-public class AccountNotFoundException extends Exception {
+public class AccountNotFoundException extends Exception implements ExceptionIF {
   public AccountNotFoundException() {
     super("Account not found.");
   }
