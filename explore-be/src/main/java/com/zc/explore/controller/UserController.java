@@ -1,13 +1,12 @@
 package com.zc.explore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zc.explore.model.response.Response;
@@ -29,7 +28,7 @@ public class UserController {
   private UserService userService;
 
   @GetMapping("/auth/info")
-  Response<ResultSingle> info(@RequestHeader("Jwe-Token") String jweToken) {
+  Response<ResultSingle> info(@CookieValue(value = "Jwe-Token", defaultValue = "") String jweToken) {
     Exception e = null;
     LoginInfo info = null;
 
@@ -85,9 +84,11 @@ public class UserController {
 
     if (e == null && jweToken != null) {
       Cookie cookie = new Cookie("Jwe-Token", jweToken);
-      cookie.setHttpOnly(false);
+
       cookie.setMaxAge(7 * 24 * 60 * 60);
       cookie.setPath("/");
+      cookie.setHttpOnly(true);
+
       resp.addCookie(cookie);
     }
 

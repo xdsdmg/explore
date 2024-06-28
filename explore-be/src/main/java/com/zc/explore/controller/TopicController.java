@@ -1,6 +1,7 @@
 package com.zc.explore.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.zc.explore.model.base.ResultList;
-import com.zc.explore.model.response.Response;
 import com.zc.explore.model.response.*;
 import com.zc.explore.model.topic.Topic;
 import com.zc.explore.model.user.User;
@@ -50,7 +50,8 @@ public class TopicController {
   }
 
   @PostMapping("/auth/create")
-  Response<ResultSingle> create(@RequestBody Topic req, @RequestHeader("Jwe-Token") String jweToken) {
+  Response<ResultSingle> create(@RequestBody Topic req,
+      @CookieValue(value = "Jwe-Token", defaultValue = "") String jweToken) {
     Exception e = null;
 
     try {

@@ -14,17 +14,7 @@ import { getCookie } from "../utils/cookie";
 
 export default function Navigation() {
   const fetchUserInfo = () => {
-    const token = getCookie('Jwe-Token');
-
-    const headers: HeadersInit = new Headers();
-    if (token) {
-      headers.set('Jwe-Token', token);
-    }
-
-    fetch(`/api/user/auth/info?jwe_token=${token}`, {
-      method: 'GET',
-      headers: headers,
-    })
+    fetch(`/api/user/auth/info`, { method: 'GET' })
       .then((res) => res.json())
       .then((body: SingleResponseBodyIF<UserInfoIF>) => {
         setUserInfo(body.data);
