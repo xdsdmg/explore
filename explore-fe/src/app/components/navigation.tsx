@@ -10,7 +10,6 @@ import { SearchIcon, ChevronDownIcon } from "@chakra-ui/icons";
 import { useEffect, useState } from "react";
 import { UserInfoIF } from "../model/user";
 import { SingleResponseBodyIF } from "../model/base";
-import { getCookie } from "../utils/cookie";
 
 export default function Navigation() {
   const fetchUserInfo = () => {
@@ -48,7 +47,7 @@ export default function Navigation() {
                 {userInfo.name} <ChevronDownIcon />
               </MenuButton>
               <MenuList>
-                <MenuItem>Create a topic</MenuItem>
+                <MenuItem><a href='/topic/create'>Create a topic</a></MenuItem>
                 <MenuItem>Logout</MenuItem>
               </MenuList>
             </Menu>

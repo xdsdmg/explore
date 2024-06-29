@@ -15,6 +15,6 @@ public interface TopicMapper {
 
   int count(String titleFuzzySearch);
 
-  @Insert("INSERT topic(`title`, `user_id`, `content`) VALUES(#{topic.title}, #{topic.user_id}, #{topic.content})")
+  @Insert("INSERT topic(`title`, `user_id`, `content`) VALUES(#{topic.title}, #{topic.userID}, #{topic.content})")
   int createTopic(@Param("topic") Topic topic);
 }

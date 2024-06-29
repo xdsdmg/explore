@@ -3,10 +3,8 @@
 "use client"
 
 import {
-  Box, Card, Divider, Text, Button,
-  FormControl, InputGroup, Input, FormLabel
-}
-  from '@chakra-ui/react';
+  Box, Card, Divider, Text, Button, FormControl, InputGroup, Input, FormLabel
+} from '@chakra-ui/react';
 
 import { defineStyle, defineStyleConfig } from '@chakra-ui/react'
 import dynamic from 'next/dynamic';
@@ -21,6 +19,11 @@ export const codeTheme = defineStyleConfig({
   variants: { brandPrimary },
 })
 
+interface TopicIF {
+  title: string,
+  content: string,
+}
+
 export default function Create() {
   let mdContent = '';
 
@@ -30,9 +33,18 @@ export default function Create() {
   );
 
   const handlePublish = () => {
-    console.log(mdContent);
     let title = (document.getElementById('title') as HTMLInputElement).value;
-    console.log(title);
+    console.log(`title: ${title}, content: ${mdContent}`);
+
+    let data: TopicIF = { title: title, content: mdContent };
+
+    fetch('/api/topic/auth/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+      .then((res) => res.json())
+      .then((body) => { console.log(`body: ${body}`) });
   };
 
   return (

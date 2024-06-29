@@ -14,16 +14,6 @@ public class Topic {
   private Date createdAt;
   private Date updatedAt;
 
-  public Topic(int id, String title, Long userID, String userName, String content, Date createdAt, Date updatedAt) {
-    this.id = id;
-    this.title = title;
-    this.userID = userID;
-    this.userName = userName;
-    this.content = content;
-    this.createdAt = createdAt;
-    this.updatedAt = updatedAt;
-  }
-
   public int getId() {
     return this.id;
   }
@@ -56,6 +46,14 @@ public class Topic {
     this.userName = userName;
   }
 
+  public String getContent() {
+    return this.content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
   public Date getCreatedAt() {
     return this.createdAt;
   }
@@ -70,14 +68,6 @@ public class Topic {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
-  }
-
-  public String getContent() {
-    return this.content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
   }
 
   @Override
