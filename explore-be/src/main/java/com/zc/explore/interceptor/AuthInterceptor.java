@@ -17,42 +17,46 @@ import lombok.extern.slf4j.Slf4j;
 // TODO: how to use context in Java?
 @Slf4j
 public class AuthInterceptor implements HandlerInterceptor {
-  @Override
-  public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-      @NonNull Object handler)
-      throws Exception {
+    @Override
+    public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                             @NonNull Object handler)
+            throws Exception {
+        if (request.getCookies() == null) {
+            return false;
+        }
 
-    String jweToken = null;
-    for (Cookie c : request.getCookies()) {
-      if ("Jwe-Token".equals(c.getName())) {
-        jweToken = c.getName();
-      }
+        String jweToken = null;
+
+        for (Cookie c : request.getCookies()) {
+            if ("Jwe-Token".equals(c.getName())) {
+                jweToken = c.getName();
+            }
+        }
+
+        if (jweToken == null || jweToken.isEmpty()) {
+            log.error("[preHandle] jwe token is null\n");
+
+            response.setContentType("application/json");
+            response.setCharacterEncoding("UTF-8");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            PrintWriter out = response.getWriter();
+            out.write("{\"msg\": \"jwe token is empty\"}");
+
+            return false;
+        }
+
+        return true;
     }
 
-    if (jweToken == null || jweToken.length() <= 0) {
-      log.error("[preHandle] jwe token is null\n");
-
-      response.setContentType("application/json");
-      response.setCharacterEncoding("UTF-8");
-      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-
-      PrintWriter out = response.getWriter();
-      out.write(String.format("{\"msg\": \"jwe token is empty\"}"));
-
-      return false;
+    @Override
+    public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                           @NonNull Object handler, @Nullable ModelAndView modelAndView) throws Exception {
     }
 
-    return true;
-  }
-
-  @Override
-  public void postHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-      @NonNull Object handler, @Nullable ModelAndView modelAndView) throws Exception {
-  }
-
-  @Override
-  public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
-      @NonNull Object handler,
-      @Nullable Exception exception) throws Exception {
-  }
+    @Override
+    public void afterCompletion(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
+                                @NonNull Object handler,
+                                @Nullable Exception exception) throws Exception {
+    }
 }

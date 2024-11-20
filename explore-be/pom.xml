@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.zc</groupId>
@@ -14,10 +14,49 @@
         <version>3.2.0-SNAPSHOT</version>
     </parent>
 
+    <dependencyManagement>
+        <dependencies>
+            <!--
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-core</artifactId>
+                    <version>1.4.14</version>
+                </dependency>
+                <dependency>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                    <version>1.4.12</version>
+                    <scope>test</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-web</artifactId>
+                    <version>6.1.12</version>
+                </dependency>
+
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-context</artifactId>
+                    <version>6.1.14</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.apache.tomcat.embed</groupId>
+                    <artifactId>tomcat-embed-core</artifactId>
+                    <version>11.0.0-M21</version>
+                </dependency>
+                <dependency>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-webmvc</artifactId>
+                    <version>6.1.13</version>
+                </dependency>
+            -->
+        </dependencies>
+    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>3.3.5</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -41,16 +80,15 @@
             <version>3.0.3</version>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.dynamic-sql</groupId>
             <artifactId>mybatis-dynamic-sql</artifactId>
             <version>1.5.1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.mybatis.generator/mybatis-generator-core -->
         <dependency>
             <groupId>org.mybatis.generator</groupId>
             <artifactId>mybatis-generator-core</artifactId>
