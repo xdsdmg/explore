@@ -32,8 +32,6 @@ public class UserController {
         Exception e = null;
         LoginInfo info = null;
 
-        log.info("hello world");
-
         try {
             info = userService.info(jweToken);
         } catch (Exception e_) {

@@ -17,34 +17,42 @@ import lombok.extern.slf4j.Slf4j;
 // TODO: how to use context in Java?
 @Slf4j
 public class AuthInterceptor implements HandlerInterceptor {
+    private void jweTokenEmptyHandler(HttpServletResponse response) throws Exception {
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+        PrintWriter out = response.getWriter();
+        out.write("{\"msg\": \"jwe token is empty\"}");
+    }
+
     @Override
     public boolean preHandle(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response,
                              @NonNull Object handler)
             throws Exception {
-        if (request.getCookies() == null) {
-            return false;
-        }
-
-        String jweToken = null;
-
-        for (Cookie c : request.getCookies()) {
-            if ("Jwe-Token".equals(c.getName())) {
-                jweToken = c.getName();
+        try {
+            if (request.getCookies() == null) {
+                jweTokenEmptyHandler(response);
+                return false;
             }
-        }
 
-        if (jweToken == null || jweToken.isEmpty()) {
-            log.error("[preHandle] jwe token is null\n");
+            String jweToken = null;
 
-            response.setContentType("application/json");
-            response.setCharacterEncoding("UTF-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            for (Cookie c : request.getCookies()) {
+                if ("Jwe-Token".equals(c.getName())) {
+                    jweToken = c.getName();
+                }
+            }
 
-            PrintWriter out = response.getWriter();
-            out.write("{\"msg\": \"jwe token is empty\"}");
-
+            if (jweToken == null || jweToken.isEmpty()) {
+                jweTokenEmptyHandler(response);
+                return false;
+            }
+        } catch (Exception e) {
+            log.error("[AuthInterceptor] preHandle failed, error: {}", e);
             return false;
         }
+
 
         return true;
     }
