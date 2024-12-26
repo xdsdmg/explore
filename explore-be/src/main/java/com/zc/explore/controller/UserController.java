@@ -24,74 +24,76 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/api/user")
 @Slf4j
 public class UserController {
-  @Autowired
-  private UserService userService;
+    @Autowired
+    private UserService userService;
 
-  @GetMapping("/auth/info")
-  Response<ResultSingle> info(@CookieValue(value = "Jwe-Token", defaultValue = "") String jweToken) {
-    Exception e = null;
-    LoginInfo info = null;
+    @GetMapping("/auth/info")
+    Response<ResultSingle> info(@CookieValue(value = "Jwe-Token", defaultValue = "") String jweToken) {
+        Exception e = null;
+        LoginInfo info = null;
 
-    try {
-      info = userService.info(jweToken);
-    } catch (Exception e_) {
-      log.error("[user] get user info failed, error: {}", e_);
-      e = e_;
+        log.info("hello world");
+
+        try {
+            info = userService.info(jweToken);
+        } catch (Exception e_) {
+            log.error("[user] get user info failed, error: {}", e_);
+            e = e_;
+        }
+
+        return Response.createSingleResponse(info, e);
     }
 
-    return Response.createSingleResponse(info, e);
-  }
+    @PostMapping("/register")
+    Response<ResultSingle> register(@RequestBody RegisterRequest req) {
+        Exception e = null;
 
-  @PostMapping("/register")
-  Response<ResultSingle> register(@RequestBody RegisterRequest req) {
-    Exception e = null;
+        try {
+            userService.register(req);
+        } catch (Exception e_) {
+            log.error("[user] register failed, error: {}", e_);
+            e = e_;
+        }
 
-    try {
-      userService.register(req);
-    } catch (Exception e_) {
-      log.error("[user] register failed, error: {}", e_);
-      e = e_;
+        return Response.createSingleResponse(null, e);
     }
 
-    return Response.createSingleResponse(null, e);
-  }
+    @GetMapping("/activate/{token}")
+    Response<ResultSingle> activate(@PathVariable(value = "token") String token) {
+        Exception e = null;
 
-  @GetMapping("/activate/{token}")
-  Response<ResultSingle> activate(@PathVariable(value = "token") String token) {
-    Exception e = null;
+        try {
+            userService.activate(token);
+        } catch (Exception e_) {
+            log.error("[user] activate failed, error: {}", e_);
+            e = e_;
+        }
 
-    try {
-      userService.activate(token);
-    } catch (Exception e_) {
-      log.error("[user] activate failed, error: {}", e_);
-      e = e_;
+        return Response.createSingleResponse(null, e);
     }
 
-    return Response.createSingleResponse(null, e);
-  }
+    @PostMapping("/login")
+    Response<ResultSingle> login(@RequestBody LoginRequest req, HttpServletResponse resp) {
+        Exception e = null;
+        String jweToken = null;
 
-  @PostMapping("/login")
-  Response<ResultSingle> login(@RequestBody LoginRequest req, HttpServletResponse resp) {
-    Exception e = null;
-    String jweToken = null;
+        try {
+            jweToken = userService.login(req);
+        } catch (Exception e_) {
+            log.error("[user] login failed, error: {}", e_);
+            e = e_;
+        }
 
-    try {
-      jweToken = userService.login(req);
-    } catch (Exception e_) {
-      log.error("[user] login failed, error: {}", e_);
-      e = e_;
+        if (e == null && jweToken != null) {
+            Cookie cookie = new Cookie("Jwe-Token", jweToken);
+
+            cookie.setMaxAge(7 * 24 * 60 * 60);
+            cookie.setPath("/");
+            cookie.setHttpOnly(true);
+
+            resp.addCookie(cookie);
+        }
+
+        return Response.createSingleResponse(null, e);
     }
-
-    if (e == null && jweToken != null) {
-      Cookie cookie = new Cookie("Jwe-Token", jweToken);
-
-      cookie.setMaxAge(7 * 24 * 60 * 60);
-      cookie.setPath("/");
-      cookie.setHttpOnly(true);
-
-      resp.addCookie(cookie);
-    }
-
-    return Response.createSingleResponse(null, e);
-  }
 }
